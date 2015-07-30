@@ -38,14 +38,18 @@ public class MailSenderShould {
 	}
 
 	private Consumer<MailSender> greetingLetter () {
-		return (MailSender sut) -> sut.sendGreetingLetter(mock(GreetingLetter.class));
+		return (MailSender sut) -> sut.send(letter(GreetingLetter.class));
 	}
 
 	private Consumer<MailSender> loveLetter () {
-		return (MailSender sut) -> sut.sendLoveLetter(mock(LoveLetter.class));
+		return (MailSender sut) -> sut.send(letter(LoveLetter.class));
 	}
 
 	private Consumer<EventLogger> aLoveLetterWasSent () {
 		return EventLogger::sentLoveLetter;
+	}
+
+	private <T> T letter (final Class<T> typeOfLetter) {
+		return mock(typeOfLetter);
 	}
 }

@@ -8,11 +8,11 @@ public class MailSender {
 		this.eventLogger = eventLogger;
 	}
 
-	public void sendGreetingLetter (final GreetingLetter letter) {
+	public void send (final GreetingLetter letter) {
 		eventLogger.sentGreetingLetter();
 	}
 
-	public void sendLoveLetter (final LoveLetter letter) {
+	public void send (final LoveLetter letter) {
 		eventLogger.sentLoveLetter();
 	}
 }
