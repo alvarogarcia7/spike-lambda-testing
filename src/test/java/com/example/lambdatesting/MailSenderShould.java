@@ -32,17 +32,19 @@ public class MailSenderShould {
 
 	private Check aLoveLetterIsSent () {
 		return new Check(
+				new Check.Given(eventLogger, mailSender),
 				(MailSender sut) -> sut.send(letter(LoveLetter.class)),
 				EventLogger::sentLoveLetter
 		);
 	}
 
 	private void mailSenderLogs (Check check) {
-		check.checkFor(mailSender, eventLogger);
+				check.checkFor();
 	}
 
 	private Check aGreetingLetterIsSent () {
 		return new Check(
+				new Check.Given(eventLogger, mailSender),
 				(MailSender sut) -> sut.send(letter(GreetingLetter.class)),
 				EventLogger::sentGreetingLetter
 		);
