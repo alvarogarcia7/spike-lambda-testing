@@ -3,9 +3,6 @@ package com.example.lambdatesting;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.function.Consumer;
-
-import static com.example.lambdatesting.CheckBuilder.*;
 import static org.mockito.Mockito.mock;
 
 public class MailSenderShould {
@@ -21,32 +18,30 @@ public class MailSenderShould {
 
 	@Test
 	public void log_greetings_letter() {
-		checkThat(aLoggingLine().forA(greetingLetter()).wasLoggedWhen(aGreetingLetterWasSent()));
+		mailSenderLogs(whenSendingAGreetingLetter());
 	}
 
 	@Test
 	public void log_love_letter() {
-		checkThat(aLoggingLine().forA(loveLetter()).wasLoggedWhen(aLoveLetterWasSent()));
+		mailSenderLogs(whenSendingALoveLetter());
 	}
 
-	private void checkThat (final Check check) {
+	private Check whenSendingALoveLetter () {
+		return new Check(
+				(MailSender sut) -> sut.send(letter(LoveLetter.class)),
+				EventLogger::sentLoveLetter
+		);
+	}
+
+	private void mailSenderLogs (Check check) {
 		check.checkFor(mailSender, eventLogger);
 	}
 
-	private Consumer<EventLogger> aGreetingLetterWasSent () {
-		return EventLogger::sentGreetingLetter;
-	}
-
-	private Consumer<MailSender> greetingLetter () {
-		return (MailSender sut) -> sut.send(letter(GreetingLetter.class));
-	}
-
-	private Consumer<MailSender> loveLetter () {
-		return (MailSender sut) -> sut.send(letter(LoveLetter.class));
-	}
-
-	private Consumer<EventLogger> aLoveLetterWasSent () {
-		return EventLogger::sentLoveLetter;
+	private Check whenSendingAGreetingLetter () {
+		return new Check(
+				(MailSender sut) -> sut.send(letter(GreetingLetter.class)),
+				EventLogger::sentGreetingLetter
+		);
 	}
 
 	private <T> T letter (final Class<T> typeOfLetter) {
