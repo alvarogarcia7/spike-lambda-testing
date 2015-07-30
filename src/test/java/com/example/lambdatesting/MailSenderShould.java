@@ -3,13 +3,16 @@ package com.example.lambdatesting;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.function.Consumer;
+
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class MailSenderShould {
 
 	private EventLogger eventLogger;
 	private MailSender mailSender;
+	private Consumer<MailSender> arrange;
+	private Consumer<EventLogger> verify;
 
 	@Before
 	public void setUp () {
@@ -17,19 +20,27 @@ public class MailSenderShould {
 		mailSender = new MailSender(eventLogger);
 	}
 
+
 	@Test
-	public void log_when_sending_greeting_letters() {
+	public void log_greetings_letter() {
+		arrange = (MailSender sut) -> sut.sendGreetingLetter(mock(GreetingLetter.class));
 
-		mailSender.sendGreetingLetter(mock(GreetingLetter.class));
+		verify = EventLogger::sentGreetingLetter;
 
-		verify(eventLogger).sentGreetingLetter();
+		assertAndVerify();
 	}
 
 	@Test
-	public void log_when_sending_love_letters() {
+	public void log_love_letter() {
+		arrange = (MailSender sut) -> sut.sendLoveLetter(mock(LoveLetter.class));
 
-		mailSender.sendLoveLetter(mock(LoveLetter.class));
+		verify = EventLogger::sentLoveLetter;
 
-		verify(eventLogger).sentLoveLetter();
+		assertAndVerify();
+	}
+
+	private void assertAndVerify() {
+		arrange.accept(mailSender);
+		verify.accept(eventLogger);
 	}
 }
