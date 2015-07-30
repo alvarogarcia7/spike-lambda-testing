@@ -11,7 +11,7 @@ public class MailSenderShould {
 
 	private EventLogger eventLogger;
 	private MailSender mailSender;
-	private Consumer<MailSender> arrange;
+	private Consumer<MailSender> act;
 	private Consumer<EventLogger> verify;
 
 	@Before
@@ -23,7 +23,7 @@ public class MailSenderShould {
 
 	@Test
 	public void log_greetings_letter() {
-		arrange = (MailSender sut) -> sut.sendGreetingLetter(mock(GreetingLetter.class));
+		act = (MailSender sut) -> sut.sendGreetingLetter(mock(GreetingLetter.class));
 
 		verify = EventLogger::sentGreetingLetter;
 
@@ -32,7 +32,7 @@ public class MailSenderShould {
 
 	@Test
 	public void log_love_letter() {
-		arrange = (MailSender sut) -> sut.sendLoveLetter(mock(LoveLetter.class));
+		act = (MailSender sut) -> sut.sendLoveLetter(mock(LoveLetter.class));
 
 		verify = EventLogger::sentLoveLetter;
 
@@ -40,7 +40,7 @@ public class MailSenderShould {
 	}
 
 	private void assertAndVerify() {
-		arrange.accept(mailSender);
+		act.accept(mailSender);
 		verify.accept(eventLogger);
 	}
 }
