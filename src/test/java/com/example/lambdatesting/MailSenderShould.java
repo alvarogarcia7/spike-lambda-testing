@@ -18,15 +18,19 @@ public class MailSenderShould {
 
 	@Test
 	public void log_greetings_letter() {
-		mailSenderLogs(whenSendingAGreetingLetter());
+		mailSenderLogs(when(aGreetingLetterIsSent()));
 	}
 
 	@Test
 	public void log_love_letter() {
-		mailSenderLogs(whenSendingALoveLetter());
+		mailSenderLogs(when(aLoveLetterIsSent()));
 	}
 
-	private Check whenSendingALoveLetter () {
+	private Check when (final Check check) {
+		return check;
+	}
+
+	private Check aLoveLetterIsSent () {
 		return new Check(
 				(MailSender sut) -> sut.send(letter(LoveLetter.class)),
 				EventLogger::sentLoveLetter
@@ -37,7 +41,7 @@ public class MailSenderShould {
 		check.checkFor(mailSender, eventLogger);
 	}
 
-	private Check whenSendingAGreetingLetter () {
+	private Check aGreetingLetterIsSent () {
 		return new Check(
 				(MailSender sut) -> sut.send(letter(GreetingLetter.class)),
 				EventLogger::sentGreetingLetter
